@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zero-Combustion AI Data Center – Tomas Torres</title>
+<style>
+    :root {
+        --slate-900: #0f172a;
+        --slate-700: #334155;
+        --slate-600: #475569;
+        --slate-500: #64748b;
+        --slate-400: #94a3b8;
+        --slate-300: #cbd5e1;
+        --slate-200: #e2e8f0;
+        --slate-100: #f1f5f9;
+        --slate-50: #f8fafc;
+        --teal-700: #0f766e;
+        --teal-600: #0d9488;
+        --teal-500: #14b8a6;
+        --teal-50: #f0fdfa;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+        background: #d1d5db;
+        color: var(--slate-700);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, "Helvetica Neue", Arial, sans-serif;
+        -webkit-font-smoothing: antialiased;
+        line-height: 1.5;
+    }
+    .page {
+        width: 8.5in;
+        height: 11in;
+        background: white;
+        margin: 24px auto;
+        position: relative;
+        overflow: hidden;
+        box-shadow: 0 12px 40px rgba(15,23,42,0.15);
+        padding: 0.65in 0.75in;
+    }
+    .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-image:
+            linear-gradient(rgba(148,163,184,0.09) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(148,163,184,0.09) 1px, transparent 1px);
+        background-size: 28px 28px;
+        pointer-events: none;
+    }
+    .content { position: relative; z-index: 2; height: 100%; display: flex; flex-direction: column; }
+    header {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 16px;
+        align-items: start;
+        padding-bottom: 18px;
+        border-bottom: 1px solid var(--slate-200);
+    }
+    .title h1 {
+        font-size: 34px;
+        line-height: 1.05;
+        color: var(--slate-900);
+        font-weight: 700;
+        letter-spacing: -0.02em;
+    }
+    .title h2 {
+        font-size: 18px;
+        font-weight: 500;
+        color: var(--teal-600);
+        margin-top: 4px;
+    }
+    .subhead {
+        margin-top: 8px;
+        font-size: 13px;
+        color: var(--slate-500);
+        font-style: italic;
+    }
+    .meta {
+        text-align: right;
+        font-size: 12px;
+        color: var(--slate-600);
+        line-height: 1.4;
+        padding-top: 4px;
+    }
+    .meta strong { color: var(--slate-900); font-weight: 600; }
+
+    .eyebrow {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        font-weight: 700;
+        color: var(--teal-700);
+        margin-bottom: 8px;
+        margin-top: 22px;
+    }
+    .section:first-of-type .eyebrow { margin-top: 18px; }
+
+    .stats {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 14px;
+    }
+    .stat {
+        background: var(--slate-50);
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 12px 14px;
+    }
+    .stat .num {
+        font-size: 26px;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.01em;
+        line-height: 1.1;
+    }
+    .stat .label {
+        font-size: 12px;
+        color: var(--slate-600);
+        margin-top: 4px;
+        line-height: 1.35;
+    }
+
+    .insight-box {
+        background: var(--teal-50);
+        border-left: 4px solid var(--teal-600);
+        padding: 14px 16px;
+        border-radius: 8px;
+        font-size: 14px;
+        color: var(--slate-700);
+    }
+    .insight-box strong { color: var(--slate-900); }
+    .insight-box em { color: var(--teal-700); font-style: normal; font-weight: 600; }
+
+    .pillars-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+    }
+    .pillar {
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 14px;
+        background: white;
+    }
+    .pillar-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 8px;
+        background: var(--teal-50);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 10px;
+        color: var(--teal-600);
+    }
+    .pillar h4 {
+        font-size: 14px;
+        font-weight: 650;
+        color: var(--slate-900);
+        margin-bottom: 6px;
+    }
+    .pillar p {
+        font-size: 12.5px;
+        color: var(--slate-600);
+        line-height: 1.45;
+    }
+
+    .pilot-grid {
+        display: grid;
+        grid-template-columns: 1.1fr 0.9fr;
+        gap: 16px;
+    }
+    .phase {
+        border: 1px solid var(--slate-200);
+        border-radius: 10px;
+        padding: 12px 14px;
+        background: var(--slate-50);
+    }
+    .phase h4 {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--slate-900);
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .badge {
+        font-size: 10px;
+        background: var(--teal-600);
+        color: white;
+        padding: 2px 6px;
+        border-radius: 999px;
+        font-weight: 600;
+        letter-spacing: 0.02em;
+    }
+    .phase ul {
+        list-style: none;
+        font-size: 12.5px;
+        color: var(--slate-600);
+    }
+    .phase li { margin: 3px 0; padding-left: 14px; position: relative; }
+    .phase li::before {
+        content: "•";
+        position: absolute;
+        left: 0;
+        color: var(--teal-600);
+    }
+
+    .whynow p {
+        font-size: 13.5px;
+        color: var(--slate-600);
+        background: white;
+        border: 1px dashed var(--slate-300);
+        padding: 12px 14px;
+        border-radius: 8px;
+    }
+    .whynow strong { color: var(--slate-900); font-weight: 600; }
+
+    .cta-box {
+        margin-top: 20px;
+        text-align: center;
+        padding: 16px;
+        border-radius: 12px;
+        background: linear-gradient(90deg, var(--slate-900), var(--slate-700));
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        letter-spacing: -0.01em;
+    }
+
+    footer {
+        margin-top: auto;
+        padding-top: 14px;
+        border-top: 1px solid var(--slate-200);
+        font-size: 10px;
+        color: var(--slate-400);
+        display: flex;
+        justify-content: space-between;
+    }
+
+    /* Page 2 */
+    .page2 .content { gap: 6px; }
+    .page-title {
+        font-size: 28px;
+        font-weight: 700;
+        color: var(--slate-900);
+        letter-spacing: -0.015em;
+    }
+    .slides {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto auto auto;
+        gap: 16px;
+        margin-top: 18px;
+    }
+    .slide {
+        border: 1px solid var(--slate-200);
+        border-radius: 12px;
+        padding: 16px;
+        background: var(--slate-50);
+        min-height: 180px;
+    }
+    .slide:nth-child(5) { grid-column: 1 / -1; min-height: 150px; }
+    .slide-header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 10px;
+    }
+    .slide-num {
+        width: 26px; height: 26px;
+        background: var(--teal-600);
+        color: white;
+        border-radius: 6px;
+        display: flex; align-items: center; justify-content: center;
+        font-size: 13px; font-weight: 700;
+    }
+    .slide h3 {
+        font-size: 15px;
+        color: var(--slate-900);
+        font-weight: 650;
+    }
+    .slide ul {
+        list-style: none;
+        font-size: 13px;
+        color: var(--slate-600);
+    }
+    .slide li {
+        margin: 6px 0;
+        padding-left: 16px;
+        position: relative;
+        line-height: 1.4;
+    }
+    .slide li::before {
+        content: "–";
+        position: absolute;
+        left: 0;
+        color: var(--teal-600);
+    }
+
+    @media print {
+        @page { size: Letter; margin: 0; }
+        html, body { background: white; }
+        .page { margin: 0; box-shadow: none; page-break-after: always; }
+        .page:last-child { page-break-after: auto; }
+        .grid-bg { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        .cta-box { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+</style>
+</head>
+<body>
+
+<!-- PAGE 1: ONE-PAGER -->
+<div class="page">
+    <div class="grid-bg"></div>
+    <div class="content">
+        <header>
+            <div class="title">
+                <h1>Zero-Combustion AI Data Center</h1>
+                <h2>Magnetic-Assisted Power + Waterless Cooling</h2>
+                <p class="subhead">A pilot-ready plan for Texas data centers</p>
+            </div>
+            <div class="meta">
+                <strong>Tomas Torres</strong><br>
+                June 4, 2026
+            </div>
+        </header>
+
+        <section class="section">
+            <h3 class="eyebrow">The Problem</h3>
+            <div class="stats">
+                <div class="stat">
+                    <div class="num">448 TWh</div>
+                    <div class="label">Global DC energy last year • 208M tons CO₂ • 1.2T gallons water</div>
+                </div>
+                <div class="stat">
+                    <div class="num">945 TWh</div>
+                    <div class="label">Projected by 2030 — AI workloads more than double demand</div>
+                </div>
+                <div class="stat">
+                    <div class="num">Texas Grid</div>
+                    <div class="label">Peak strain, interconnection delays, and aquifer stress risk</div>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h3 class="eyebrow">Core Insight</h3>
+            <div class="insight-box">
+                <strong>No perpetual motion.</strong> Magnets don't create energy — they convert it with far less friction and loss. The real leverage point is <em>cooling</em>. Removing heat without water or chillers cuts 30–60% of a data center's parasitic load.
+            </div>
+        </section>
+
+        <section class="section">
+            <h3 class="eyebrow">Solution Pillars</h3>
+            <div class="pillars-grid">
+                <div class="pillar">
+                    <div class="pillar-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 4v6a2 2 0 0 0 2 2h6"/><path d="M5 12V6a2 2 0 0 1 2-2h4"/><rect x="3" y="12" width="7" height="9" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/></svg>
+                    </div>
+                    <h4>Power</h4>
+                    <p>Permanent-magnet direct-drive wind/solar + magnetic-bearing flywheels for ride-through. SMR or geothermal option for base load. Zero on-site combustion, zero diesel.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                    </div>
+                    <h4>Cooling</h4>
+                    <p>Direct-to-chip two-phase dielectric (PG25) then full immersion. Closed loop, WUE ~0, PUE 1.05–1.1. 30–60% cooling energy cut vs. air.</p>
+                </div>
+                <div class="pillar">
+                    <div class="pillar-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2"/><rect x="2" y="14" width="20" height="8" rx="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+                    </div>
+                    <h4>Architecture</h4>
+                    <p>Designed for 50–100kW racks. Heat reuse for building HVAC and greenhouse. Sensor-rich ops with real-time PUE/WUE telemetry.</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h3 class="eyebrow">Pilot Plan</h3>
+            <div class="pilot-grid">
+                <div class="phase">
+                    <h4>Phase 1 <span class="badge">6 MONTHS</span></h4>
+                    <ul>
+                        <li>2 racks, 80–150kW total load</li>
+                        <li>Budget: $250k (cooling skids, retrofit, sensors)</li>
+                        <li>Metrics: PUE, WUE, kWh saved, water gallons avoided</li>
+                    </ul>
+                </div>
+                <div class="phase">
+                    <h4>Phase 2 <span class="badge">SCALE</span></h4>
+                    <ul>
+                        <li>Expand to 1MW pod in Carrollton</li>
+                        <li>Add flywheel + behind-meter solar</li>
+                        <li>Target: PUE ≤1.08, WUE = 0, payback &lt;3yr</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section whynow">
+            <h3 class="eyebrow">Why Now</h3>
+            <p>Vendors are already shipping: <strong>Vertiv CoolPhase Flex</strong>, <strong>ZutaCore HyperCool</strong>, <strong>Schneider Uniflair XCA</strong>. Industry is moving from air to liquid at 50kW+ per rack. Texas SB-6 and water restrictions make zero-water designs a competitive advantage.</p>
+        </section>
+
+        <div class="cta-box">Let's prove zero-water AI in Carrollton.</div>
+
+        <footer>
+            <span>Prepared by Tomas Torres – Meta AI assist</span>
+            <span>Confidential Brief • June 2026</span>
+        </footer>
+    </div>
+</div>
+
+<!-- PAGE 2: PITCH OUTLINE -->
+<div class="page page2">
+    <div class="grid-bg"></div>
+    <div class="content">
+        <div>
+            <h1 class="page-title">5-Slide Pitch Outline</h1>
+            <p class="subhead">Zero-Combustion AI Data Center — Investor / Partner Deck</p>
+        </div>
+
+        <div class="slides">
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-num">1</div>
+                    <h3>Problem</h3>
+                </div>
+                <ul>
+                    <li>448 TWh global DC use (2025) = 208M tCO₂, 1.2T gal water</li>
+                    <li>945 TWh projected by 2030</li>
+                    <li>Texas: grid volatility, ERCOT peaks, water scarcity</li>
+                    <li>Result: higher opex, permitting risk, community pushback</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-num">2</div>
+                    <h3>Physics Reality</h3>
+                </div>
+                <ul>
+                    <li>No "free energy" — magnets enable ultra-efficient conversion</li>
+                    <li>Permanent-magnet generators: >96% efficiency, no gearbox</li>
+                    <li>Magnetic bearings: near-zero friction for flywheels</li>
+                    <li>Cooling is 30–40% of load — that's the leverage</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-num">3</div>
+                    <h3>Power Design</h3>
+                </div>
+                <ul>
+                    <li>Primary: grid + behind-meter PM wind/solar</li>
+                    <li>Ride-through: magnetic-bearing flywheels (not batteries)</li>
+                    <li>Base load option: SMR or geothermal — zero combustion</li>
+                    <li>Outcome: resilient, clean, < $0.06/kWh blended</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-num">4</div>
+                    <h3>Cooling Design</h3>
+                </div>
+                <ul>
+                    <li>Step 1: Direct-to-chip two-phase (PG25 dielectric)</li>
+                    <li>Step 2: Full immersion for GPU clusters</li>
+                    <li>Closed loop dry coolers — WUE ~0</li>
+                    <li>PUE 1.05–1.1, 30–60% cooling energy reduction, 50–100kW/rack ready</li>
+                </ul>
+            </div>
+
+            <div class="slide">
+                <div class="slide-header">
+                    <div class="slide-num">5</div>
+                    <h3>Pilot & ROI</h3>
+                </div>
+                <ul>
+                    <li>Phase 1: 2 racks, $250k, 6 months in Carrollton — measure PUE, WUE, kWh</li>
+                    <li>Phase 2: Scale to 1MW pod, add flywheel + solar</li>
+                    <li>ROI drivers: energy savings, water avoided, density premium, faster permitting</li>
+                    <li>Ask: site partner, $250k pilot funding, vendor access — prove zero-water AI this year</li>
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <span>Prepared by Tomas Torres – Meta AI assist</span>
+            <span>v1.0 • June 4, 2026</span>
+        </footer>
+    </div>
+</div>
+
+<script>(function(){document.addEventListener("click",function(e){var a=e.target.closest("[data-product-id]");if(!a)return;e.preventDefault();var pid=a.getAttribute("data-product-id");if(pid)parent.postMessage({type:"ecto-artifact-link-click",productId:pid},"*")})})();</script>
+</body>
+</html>
