@@ -14,28 +14,6 @@ O.S. for predictable innovation with regenerative compute
 	<style type="text/css">
 		@page { size: 8.5in 11in; margin-left: 0.79in; margin-right: 0.39in; margin-top: 0.39in; margin-bottom: 0.39in }
 		p { font-family: "apple-system", "BlinkMacSystemFont", "Segoe UI", "Roboto", "Inter", "Helvetica Neue", "Arial", sans-serif; line-height: 115%; margin-bottom: 0.1in; background: transparent }
-		h1 { margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h1.western { font-family: "Liberation Serif", serif; font-size: 24pt; font-weight: bold }
-		h1.cjk { font-family: "Noto Serif CJK SC"; font-size: 24pt; font-weight: bold }
-		h1.ctl { font-family: "FreeSans"; font-size: 24pt; font-weight: bold }
-		h2 { margin-top: 0.14in; margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h2.western { font-family: "Liberation Serif", serif; font-size: 18pt; font-weight: bold }
-		h2.cjk { font-family: "Noto Serif CJK SC"; font-size: 18pt; font-weight: bold }
-		h2.ctl { font-family: "FreeSans"; font-size: 18pt; font-weight: bold }
-		p.subhead { font-size: 9pt; font-style: italic; margin-top: 0.08in }
-		h3 { margin-top: 0.1in; margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h3.western { font-family: "Liberation Serif", serif; font-size: 14pt; font-weight: bold }
-		h3.cjk { font-family: "Noto Serif CJK SC"; font-size: 14pt; font-weight: bold }
-		h3.ctl { font-family: "FreeSans"; font-size: 14pt; font-weight: bold }
-		h3.eyebrow { text-transform: uppercase; font-size: 8pt; margin-top: 0.19in }
-		h4 { margin-top: 0.08in; margin-bottom: 0.08in; background: transparent; page-break-after: avoid }
-		h4.western { font-family: "Liberation Serif", serif; font-size: 12pt; font-weight: bold }
-		h4.cjk { font-family: "Noto Serif CJK SC"; font-size: 12pt; font-weight: bold }
-		h4.ctl { font-family: "FreeSans"; font-size: 12pt; font-weight: bold }
-		h1.page-title { font-size: 21pt }
-		strong { font-weight: bold }
-		em { font-style: italic }
-	</style>
 </head>
 <body lang="en-US" link="#000080" vlink="#800000" bgcolor="#d1d5db" dir="ltr"><h1 class="western" style="margin-left: 0.25in; margin-right: 0.25in; margin-top: 0.25in; margin-bottom: 0.25in">
 <span style="display: inline-block; border: none; padding: 0in"><span style="background: #ffffff">Zero-Combustion
